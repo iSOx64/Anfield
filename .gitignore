@@ -1,0 +1,10 @@
+/vendor/
+/storage/logs/*.log
+/.env.local
+/.phpunit.result.cache
+/composer.lock
+public/uploads/avatars/*
+!public/uploads/avatars/.gitkeep
+storage/uploads/avatars/*
+!storage/uploads/avatars/.gitkeep
+
