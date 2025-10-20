@@ -4,53 +4,50 @@ Lightweight MVC application in PHP 8.1 to manage football field reservations, op
 
 ## Installation
 
-1. Install dependencies with `composer install`.
-2. Configure environment:
-   - Copy `.env` to `.env.local` if needed and update database/SMTP credentials.
-   - Create Google reCAPTCHA v3 keys and set `RECAPTCHA_SITE_KEY` plus `RECAPTCHA_SECRET_KEY`.
-   - Provide SMTP settings (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_ENCRYPTION`, `MAIL_FROM`, `MAIL_FROM_NAME`).
-   - Create the MySQL database and run the SQL script in `database/schema.sql`.
-3. Run the development server with `php -S localhost:8000 -t public`.
+1. **Install dependencies**
+   `ash
+   composer install
+   `
+2. **Configure environment**
+   - Copy .env to .env.local if you want local overrides and update database/SMTP credentials.
+   - Provide Google reCAPTCHA v3 keys in RECAPTCHA_SITE_KEY and RECAPTCHA_SECRET_KEY.
+   - Create the MySQL database and run the SQL script in database/schema.sql.
+3. **Run the development server**
+   `ash
+   php -S localhost:8000 -t public
+   `
+4. **contact me for .env file** ww
 
-### Upgrading existing database
+### Upgrading an existing database
 
-If your database was created before the email-verification feature, apply:
+If your database was created before the email-verification/remember-me features, run:
 
-```sql
+`sql
 ALTER TABLE utilisateur
   ADD COLUMN avatar_path VARCHAR(255) NULL AFTER password_hash,
   ADD COLUMN verification_code VARCHAR(12) NULL AFTER avatar_path,
   ADD COLUMN verification_expires_at DATETIME NULL AFTER verification_code,
-  ADD COLUMN email_verified_at DATETIME NULL AFTER verification_expires_at;
-```
+  ADD COLUMN email_verified_at DATETIME NULL AFTER verification_expires_at,
+  ADD COLUMN remember_token VARCHAR(255) NULL AFTER email_verified_at,
+  ADD COLUMN remember_expires_at DATETIME NULL AFTER remember_token;
+`
 
 ## Structure
 
-- `public/` — front controller (`index.php`) and static assets.
-- `app/Core` — configuration, database access, router, views, auth helpers.
-- `app/Services` — business services (reservations, pricing, tournaments, mail).
-- `app/Controllers` — HTTP controllers.
-- `views/` — PHP templates grouped by feature.
-- `storage/` — logs and generated documents.
+- public/ ï¿½ front controller (index.php) and static assets.
+- pp/Core ï¿½ configuration, database access, router, views, auth helpers.
+- pp/Services ï¿½ business services (reservations, pricing, tournaments, mail).
+- pp/Controllers ï¿½ HTTP controllers.
+- iews/ ï¿½ PHP templates grouped by feature.
+- storage/ ï¿½ logs and generated documents.
 
-## Email verification
+## Features
 
-Each new account receives a 6-digit code by email. Users can renvoyer the code and must confirm before accessing protected routes. Admins can update roles from the dashboard and users can upload avatars from the profile page.
-
-## Administration
-
-- Default admin credentials: `admin@footfields.com` / `Admin123!` (change them in production).
-- Tableau de bord synthese avec revenu mensuel, reservations a venir, part des terrains et KPI quotidiens.
-- Gestion des terrains avec ajout rapide, edition des disponibilites et historique des activations.
-- Recherche et edition des roles utilisateurs avec statistiques mensuelles.
-- Vue disponibilites avec filtres multi-criteres (periode, terrain, statut) et export CSV pour partager l agenda.
-
-## Tests
-
-No automated tests are bundled, but you can add PHPUnit if required.
+- Email verification with 6-digit code and resend option.
+- Persistent login (ï¿½remember meï¿½) cookie with secure, expiring tokens.
+- Profile management (avatar upload, contact details).
+- Admin dashboard to manage users, roles, and facilities.
 
 ## Licence
-
-Released under the MIT Licence.
 
 
